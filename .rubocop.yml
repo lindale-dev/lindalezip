@@ -1,6 +1,0 @@
-inherit_from:
-  - .rubocop_rubyzip.yml
-AllCops:
-  TargetRubyVersion: 1.9
-Style/MutableConstant:
-  Enabled: false # Because some existent code relies on mutable constant
