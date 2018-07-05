@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   # ZipFile is modeled after java.util.zip.ZipFile from the Java SDK.
   # The most important methods are those inherited from
@@ -416,6 +417,7 @@ module Zip
       end
     end
   end
+end
 end
 
 # Copyright (C) 2002, 2003 Thomas Sondergaard

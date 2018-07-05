@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   class ExtraField::Generic
     def self.register_map
@@ -40,4 +41,5 @@ module Zip
       self.class.const_get(:HEADER_ID) + [s.bytesize].pack('v') << s
     end
   end
+end
 end

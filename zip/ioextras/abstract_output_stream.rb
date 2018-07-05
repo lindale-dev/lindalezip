@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   module IOExtras
     # Implements many of the output convenience methods of IO.
@@ -40,4 +41,5 @@ module Zip
       end
     end
   end
+end
 end

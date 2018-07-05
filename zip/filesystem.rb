@@ -1,3 +1,4 @@
+module Lindale
 require 'zip'
 
 module Zip
@@ -616,6 +617,7 @@ module Zip
   class File
     include FileSystem
   end
+end
 end
 
 # Copyright (C) 2002, 2003 Thomas Sondergaard

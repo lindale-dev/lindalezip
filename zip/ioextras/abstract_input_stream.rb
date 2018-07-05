@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   module IOExtras
     # Implements many of the convenience methods of IO
@@ -108,4 +109,5 @@ module Zip
       alias_method :each, :each_line
     end
   end
+end
 end

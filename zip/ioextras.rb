@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   module IOExtras #:nodoc:
     CHUNK_SIZE = 131_072
@@ -30,6 +31,8 @@ end
 
 require 'zip/ioextras/abstract_input_stream'
 require 'zip/ioextras/abstract_output_stream'
+
+end
 
 # Copyright (C) 2002-2004 Thomas Sondergaard
 # rubyzip is free software; you can redistribute it and/or

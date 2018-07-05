@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   class StreamableDirectory < Entry
     def initialize(zipfile, entry, srcPath = nil, permissionInt = nil)
@@ -8,6 +9,7 @@ module Zip
       @unix_perms = permissionInt if permissionInt
     end
   end
+end
 end
 
 # Copyright (C) 2002, 2003 Thomas Sondergaard

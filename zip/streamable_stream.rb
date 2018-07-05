@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   class StreamableStream < DelegateClass(Entry) # nodoc:all
     def initialize(entry)
@@ -49,6 +50,7 @@ module Zip
       @temp_file.unlink
     end
   end
+end
 end
 
 # Copyright (C) 2002, 2003 Thomas Sondergaard

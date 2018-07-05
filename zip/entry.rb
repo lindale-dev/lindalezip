@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   class Entry
     STORED   = 0
@@ -689,6 +690,7 @@ module Zip
       end
     end
   end
+end
 end
 
 # Copyright (C) 2002, 2003 Thomas Sondergaard

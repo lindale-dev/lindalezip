@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   module TraditionalEncryption
     def initialize(password)
@@ -92,6 +93,7 @@ module Zip
       n
     end
   end
+end
 end
 
 # Copyright (C) 2002, 2003 Thomas Sondergaard

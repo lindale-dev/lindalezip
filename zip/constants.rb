@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   RUNNING_ON_WINDOWS = RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/i
 
@@ -60,4 +61,5 @@ module Zip
     FSTYPE_MAC_OSX  => 'Mac OS/X (Darwin)'.freeze,
     FSTYPE_ATHEOS   => 'AtheOS'.freeze
   }.freeze
+end
 end

@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   # Info-ZIP Extra for Zip64 size
   class ExtraField::Zip64 < ExtraField::Generic
@@ -65,4 +66,5 @@ module Zip
       packed
     end
   end
+end
 end

@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   # placeholder to reserve space for a Zip64 extra information record, for the
   # local file header only, that we won't know if we'll need until after
@@ -12,4 +13,5 @@ module Zip
       "\x00" * 16
     end
   end
+end
 end

@@ -1,3 +1,5 @@
+module Lindale
+
 require 'delegate'
 require 'singleton'
 require 'tempfile'
@@ -62,6 +64,8 @@ module Zip
   end
 
   reset!
+end
+
 end
 
 # Copyright (C) 2002, 2003 Thomas Sondergaard

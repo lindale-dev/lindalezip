@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   # Olf Info-ZIP Extra for UNIX uid/gid and file timestampes
   class ExtraField::OldUnix < ExtraField::Generic
@@ -41,4 +42,5 @@ module Zip
       [@atime, @mtime].pack('VV')
     end
   end
+end
 end

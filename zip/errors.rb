@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   class Error < StandardError; end
   class EntryExistsError < Error; end
@@ -14,4 +15,5 @@ module Zip
   ZipCompressionMethodError = CompressionMethodError
   ZipEntryNameError = EntryNameError
   ZipInternalError = InternalError
+end
 end

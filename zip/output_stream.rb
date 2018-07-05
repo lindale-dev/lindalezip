@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   # ZipOutputStream is the basic class for writing zip files. It is
   # possible to create a ZipOutputStream object directly, passing
@@ -182,6 +183,7 @@ module Zip
       self
     end
   end
+end
 end
 
 # Copyright (C) 2002, 2003 Thomas Sondergaard

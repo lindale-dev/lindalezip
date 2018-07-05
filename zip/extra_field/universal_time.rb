@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   # Info-ZIP Additional timestamp field
   class ExtraField::UniversalTime < ExtraField::Generic
@@ -44,4 +45,5 @@ module Zip
       s
     end
   end
+end
 end

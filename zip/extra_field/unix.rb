@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   # Info-ZIP Extra for UNIX uid/gid
   class ExtraField::IUnix < ExtraField::Generic
@@ -34,4 +35,5 @@ module Zip
       ''
     end
   end
+end
 end

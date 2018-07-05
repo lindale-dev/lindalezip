@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   # InputStream is the basic class for reading zip entries in a
   # zip file. It is possible to create a InputStream object directly,
@@ -166,6 +167,7 @@ module Zip
       @decompressor.input_finished?
     end
   end
+end
 end
 
 # Copyright (C) 2002, 2003 Thomas Sondergaard

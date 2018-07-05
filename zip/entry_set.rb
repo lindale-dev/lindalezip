@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   class EntrySet #:nodoc:all
     include Enumerable
@@ -79,6 +80,7 @@ module Zip
       k
     end
   end
+end
 end
 
 # Copyright (C) 2002, 2003 Thomas Sondergaard

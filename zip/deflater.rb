@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   class Deflater < Compressor #:nodoc:all
     def initialize(output_stream, level = Zip.default_compression, encrypter = NullEncrypter.new)
@@ -27,6 +28,7 @@ module Zip
 
     attr_reader :size, :crc
   end
+end
 end
 
 # Copyright (C) 2002, 2003 Thomas Sondergaard

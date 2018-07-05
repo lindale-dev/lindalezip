@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   class Inflater < Decompressor #:nodoc:all
     def initialize(input_stream, decrypter = NullDecrypter.new)
@@ -59,6 +60,7 @@ module Zip
       ''
     end
   end
+end
 end
 
 # Copyright (C) 2002, 2003 Thomas Sondergaard

@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   class Decompressor #:nodoc:all
     CHUNK_SIZE = 32_768
@@ -6,6 +7,7 @@ module Zip
       @input_stream = input_stream
     end
   end
+end
 end
 
 # Copyright (C) 2002, 2003 Thomas Sondergaard

@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   class PassThruCompressor < Compressor #:nodoc:all
     def initialize(outputStream)
@@ -16,6 +17,7 @@ module Zip
 
     attr_reader :size, :crc
   end
+end
 end
 
 # Copyright (C) 2002, 2003 Thomas Sondergaard

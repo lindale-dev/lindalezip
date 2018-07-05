@@ -1,3 +1,4 @@
+module Lindale
 module Zip
   class CentralDirectory
     include Enumerable
@@ -201,6 +202,7 @@ module Zip
       @entry_set.entries.sort == other.entries.sort && comment == other.comment
     end
   end
+end
 end
 
 # Copyright (C) 2002, 2003 Thomas Sondergaard
