@@ -20,9 +20,9 @@ module Zip
       size, content = initial_parse(binstr)
       size || return
       @flag, mtime, atime, ctime = content.unpack('CVVV')
-      mtime && @mtime ||= ::Zip::DOSTime.at(mtime)
-      atime && @atime ||= ::Zip::DOSTime.at(atime)
-      ctime && @ctime ||= ::Zip::DOSTime.at(ctime)
+      mtime && @mtime ||= Lindale::Zip::DOSTime.at(mtime)
+      atime && @atime ||= Lindale::Zip::DOSTime.at(atime)
+      ctime && @ctime ||= Lindale::Zip::DOSTime.at(ctime)
     end
 
     def ==(other)

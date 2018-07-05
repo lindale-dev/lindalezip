@@ -29,8 +29,8 @@ module Zip
   end # IOExtras namespace module
 end
 
-require 'zip/ioextras/abstract_input_stream'
-require 'zip/ioextras/abstract_output_stream'
+require_relative 'ioextras/abstract_input_stream'
+require_relative 'ioextras/abstract_output_stream'
 
 end
 

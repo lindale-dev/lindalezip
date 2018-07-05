@@ -24,7 +24,7 @@ module Zip
     end
 
     def produce_input
-      sysread(::Zip::Decompressor::CHUNK_SIZE)
+      sysread(Lindale::Zip::Decompressor::CHUNK_SIZE)
     end
 
     def input_finished?

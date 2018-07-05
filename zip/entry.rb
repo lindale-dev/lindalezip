@@ -20,7 +20,7 @@ module Zip
       @local_header_size        = nil # not known until local entry is created or read
       @internal_file_attributes = 1
       @external_file_attributes = 0
-      @header_signature         = ::Zip::CENTRAL_DIRECTORY_ENTRY_SIGNATURE
+      @header_signature         = Lindale::Zip::CENTRAL_DIRECTORY_ENTRY_SIGNATURE
 
       @version_needed_to_extract = VERSION_NEEDED_TO_EXTRACT
       @version                   = VERSION_MADE_BY
@@ -28,7 +28,7 @@ module Zip
       @ftype           = nil          # unspecified or unknown
       @filepath        = nil
       @gp_flags        = 0
-      if ::Zip.unicode_names
+      if Lindale::Zip.unicode_names
         @gp_flags |= EFS
         @version = 63
       end
@@ -48,7 +48,7 @@ module Zip
 
     def check_name(name)
       return unless name.start_with?('/')
-      raise ::Zip::EntryNameError, "Illegal ZipEntry name '#{name}', name must not start with /"
+      raise Lindale::Zip::EntryNameError, "Illegal ZipEntry name '#{name}', name must not start with /"
     end
 
     def initialize(*args)
@@ -56,7 +56,7 @@ module Zip
       check_name(name)
 
       set_default_vars_values
-      @fstype = ::Zip::RUNNING_ON_WINDOWS ? ::Zip::FSTYPE_FAT : ::Zip::FSTYPE_UNIX
+      @fstype = Lindale::Zip::RUNNING_ON_WINDOWS ? Lindale::Zip::FSTYPE_FAT : Lindale::Zip::FSTYPE_UNIX
 
       @zipfile            = args[0] || ''
       @name               = name
@@ -64,12 +64,12 @@ module Zip
       @extra              = args[3] || ''
       @compressed_size    = args[4] || 0
       @crc                = args[5] || 0
-      @compression_method = args[6] || ::Zip::Entry::DEFLATED
+      @compression_method = args[6] || Lindale::Zip::Entry::DEFLATED
       @size               = args[7] || 0
-      @time               = args[8] || ::Zip::DOSTime.now
+      @time               = args[8] || Lindale::Zip::DOSTime.now
 
       @ftype = name_is_directory? ? :directory : :file
-      @extra = ::Zip::ExtraField.new(@extra.to_s) unless @extra.is_a?(::Zip::ExtraField)
+      @extra = Lindale::Zip::ExtraField.new(@extra.to_s) unless @extra.is_a?(Lindale::Zip::ExtraField)
     end
 
     def time
@@ -149,7 +149,7 @@ module Zip
 
     # Extracts entry to file dest_path (defaults to @name).
     def extract(dest_path = @name, &block)
-      block ||= proc { ::Zip.on_exists_proc }
+      block ||= proc { Lindale::Zip.on_exists_proc }
 
       if @name.squeeze('/') =~ /\.{2}(?:\/|\z)/
         puts "WARNING: skipped \"../\" path component(s) in #{@name}"
@@ -224,16 +224,16 @@ module Zip
     def read_local_entry(io) #:nodoc:all
       @local_header_offset = io.tell
 
-      static_sized_fields_buf = io.read(::Zip::LOCAL_ENTRY_STATIC_HEADER_LENGTH) || ''
+      static_sized_fields_buf = io.read(Lindale::Zip::LOCAL_ENTRY_STATIC_HEADER_LENGTH) || ''
 
-      unless static_sized_fields_buf.bytesize == ::Zip::LOCAL_ENTRY_STATIC_HEADER_LENGTH
+      unless static_sized_fields_buf.bytesize == Lindale::Zip::LOCAL_ENTRY_STATIC_HEADER_LENGTH
         raise Error, 'Premature end of file. Not enough data for zip entry local header'
       end
 
       unpack_local_entry(static_sized_fields_buf)
 
-      unless @header_signature == ::Zip::LOCAL_ENTRY_SIGNATURE
-        raise ::Zip::Error, "Zip local header magic not found at location '#{local_header_offset}'"
+      unless @header_signature == Lindale::Zip::LOCAL_ENTRY_SIGNATURE
+        raise Lindale::Zip::Error, "Zip local header magic not found at location '#{local_header_offset}'"
       end
       set_time(@last_mod_date, @last_mod_time)
 
@@ -241,17 +241,17 @@ module Zip
       extra = io.read(@extra_length)
 
       @name.tr!('\\', '/')
-      if ::Zip.force_entry_names_encoding
-        @name.force_encoding(::Zip.force_entry_names_encoding)
+      if Lindale::Zip.force_entry_names_encoding
+        @name.force_encoding(Lindale::Zip.force_entry_names_encoding)
       end
 
       if extra && extra.bytesize != @extra_length
-        raise ::Zip::Error, 'Truncated local zip entry header'
+        raise Lindale::Zip::Error, 'Truncated local zip entry header'
       else
-        if @extra.is_a?(::Zip::ExtraField)
+        if @extra.is_a?(Lindale::Zip::ExtraField)
           @extra.merge(extra) if extra
         else
-          @extra = ::Zip::ExtraField.new(extra)
+          @extra = Lindale::Zip::ExtraField.new(extra)
         end
       end
       parse_zip64_extra(true)
@@ -260,7 +260,7 @@ module Zip
 
     def pack_local_entry
       zip64 = @extra['Zip64']
-      [::Zip::LOCAL_ENTRY_SIGNATURE,
+      [Lindale::Zip::LOCAL_ENTRY_SIGNATURE,
        @version_needed_to_extract, # version needed to extract
        @gp_flags, # @gp_flags                  ,
        @compression_method,
@@ -311,14 +311,14 @@ module Zip
 
     def set_ftype_from_c_dir_entry
       @ftype = case @fstype
-               when ::Zip::FSTYPE_UNIX
+               when Lindale::Zip::FSTYPE_UNIX
                  @unix_perms = (@external_file_attributes >> 16) & 0o7777
                  case (@external_file_attributes >> 28)
-                 when ::Zip::FILE_TYPE_DIR
+                 when Lindale::Zip::FILE_TYPE_DIR
                    :directory
-                 when ::Zip::FILE_TYPE_FILE
+                 when Lindale::Zip::FILE_TYPE_FILE
                    :file
-                 when ::Zip::FILE_TYPE_SYMLINK
+                 when Lindale::Zip::FILE_TYPE_SYMLINK
                    :symlink
                  else
                    # best case guess for whether it is a file or not
@@ -339,37 +339,37 @@ module Zip
     end
 
     def check_c_dir_entry_static_header_length(buf)
-      return if buf.bytesize == ::Zip::CDIR_ENTRY_STATIC_HEADER_LENGTH
+      return if buf.bytesize == Lindale::Zip::CDIR_ENTRY_STATIC_HEADER_LENGTH
       raise Error, 'Premature end of file. Not enough data for zip cdir entry header'
     end
 
     def check_c_dir_entry_signature
-      return if header_signature == ::Zip::CENTRAL_DIRECTORY_ENTRY_SIGNATURE
+      return if header_signature == Lindale::Zip::CENTRAL_DIRECTORY_ENTRY_SIGNATURE
       raise Error, "Zip local header magic not found at location '#{local_header_offset}'"
     end
 
     def check_c_dir_entry_comment_size
       return if @comment && @comment.bytesize == @comment_length
-      raise ::Zip::Error, 'Truncated cdir zip entry header'
+      raise Lindale::Zip::Error, 'Truncated cdir zip entry header'
     end
 
     def read_c_dir_extra_field(io)
-      if @extra.is_a?(::Zip::ExtraField)
+      if @extra.is_a?(Lindale::Zip::ExtraField)
         @extra.merge(io.read(@extra_length))
       else
-        @extra = ::Zip::ExtraField.new(io.read(@extra_length))
+        @extra = Lindale::Zip::ExtraField.new(io.read(@extra_length))
       end
     end
 
     def read_c_dir_entry(io) #:nodoc:all
-      static_sized_fields_buf = io.read(::Zip::CDIR_ENTRY_STATIC_HEADER_LENGTH)
+      static_sized_fields_buf = io.read(Lindale::Zip::CDIR_ENTRY_STATIC_HEADER_LENGTH)
       check_c_dir_entry_static_header_length(static_sized_fields_buf)
       unpack_c_dir_entry(static_sized_fields_buf)
       check_c_dir_entry_signature
       set_time(@last_mod_date, @last_mod_time)
       @name = io.read(@name_length)
-      if ::Zip.force_entry_names_encoding
-        @name.force_encoding(::Zip.force_entry_names_encoding)
+      if Lindale::Zip.force_entry_names_encoding
+        @name.force_encoding(Lindale::Zip.force_entry_names_encoding)
       end
       read_c_dir_extra_field(io)
       @comment = io.read(@comment_length)
@@ -408,7 +408,7 @@ module Zip
       return unless file? || directory?
 
       case @fstype
-      when ::Zip::FSTYPE_UNIX
+      when Lindale::Zip::FSTYPE_UNIX
         set_unix_permissions_on_path(dest_path)
       end
     end
@@ -443,17 +443,17 @@ module Zip
     def write_c_dir_entry(io) #:nodoc:all
       prep_zip64_extra(false)
       case @fstype
-      when ::Zip::FSTYPE_UNIX
+      when Lindale::Zip::FSTYPE_UNIX
         ft = case @ftype
              when :file
                @unix_perms ||= 0o644
-               ::Zip::FILE_TYPE_FILE
+               Lindale::Zip::FILE_TYPE_FILE
              when :directory
                @unix_perms ||= 0o755
-               ::Zip::FILE_TYPE_DIR
+               Lindale::Zip::FILE_TYPE_DIR
              when :symlink
                @unix_perms ||= 0o755
-               ::Zip::FILE_TYPE_SYMLINK
+               Lindale::Zip::FILE_TYPE_SYMLINK
              end
 
         unless ft.nil?
@@ -485,8 +485,8 @@ module Zip
     # Warning: may behave weird with symlinks.
     def get_input_stream(&block)
       if @ftype == :directory
-        yield ::Zip::NullInputStream if block_given?
-        ::Zip::NullInputStream
+        yield Lindale::Zip::NullInputStream if block_given?
+        Lindale::Zip::NullInputStream
       elsif @filepath
         case @ftype
         when :file
@@ -500,7 +500,7 @@ module Zip
           raise "unknown @file_type #{@ftype}"
         end
       else
-        zis = ::Zip::InputStream.new(@zipfile, local_header_offset)
+        zis = Lindale::Zip::InputStream.new(@zipfile, local_header_offset)
         zis.instance_variable_set(:@complete_entry, self)
         zis.get_next_entry
         if block_given?
@@ -545,10 +545,10 @@ module Zip
 
     def write_to_zip_output_stream(zip_output_stream) #:nodoc:all
       if @ftype == :directory
-        zip_output_stream.put_next_entry(self, nil, nil, ::Zip::Entry::STORED)
+        zip_output_stream.put_next_entry(self, nil, nil, Lindale::Zip::Entry::STORED)
       elsif @filepath
-        zip_output_stream.put_next_entry(self, nil, nil, compression_method || ::Zip::Entry::DEFLATED)
-        get_input_stream { |is| ::Zip::IOExtras.copy_stream(zip_output_stream, is) }
+        zip_output_stream.put_next_entry(self, nil, nil, compression_method || Lindale::Zip::Entry::DEFLATED)
+        get_input_stream { |is| Lindale::Zip::IOExtras.copy_stream(zip_output_stream, is) }
       else
         zip_output_stream.copy_raw_entry(self)
       end
@@ -575,14 +575,14 @@ module Zip
     private
 
     def set_time(binary_dos_date, binary_dos_time)
-      @time = ::Zip::DOSTime.parse_binary_dos_format(binary_dos_date, binary_dos_time)
+      @time = Lindale::Zip::DOSTime.parse_binary_dos_format(binary_dos_date, binary_dos_time)
     rescue ArgumentError
-      warn 'Invalid date/time in zip entry' if ::Zip.warn_invalid_date
+      warn 'Invalid date/time in zip entry' if Lindale::Zip.warn_invalid_date
     end
 
     def create_file(dest_path, _continue_on_exists_proc = proc { Zip.continue_on_exists_proc })
       if ::File.exist?(dest_path) && !yield(self, dest_path)
-        raise ::Zip::DestinationFileExistsError,
+        raise Lindale::Zip::DestinationFileExistsError,
               "Destination '#{dest_path}' already exists"
       end
       ::File.open(dest_path, 'wb') do |os|
@@ -590,7 +590,7 @@ module Zip
           set_extra_attributes_on_path(dest_path)
 
           buf = ''
-          while (buf = is.sysread(::Zip::Decompressor::CHUNK_SIZE, buf))
+          while (buf = is.sysread(Lindale::Zip::Decompressor::CHUNK_SIZE, buf))
             os << buf
           end
         end
@@ -603,7 +603,7 @@ module Zip
         if block_given? && yield(self, dest_path)
           ::FileUtils.rm_f dest_path
         else
-          raise ::Zip::DestinationFileExistsError,
+          raise Lindale::Zip::DestinationFileExistsError,
                 "Cannot create directory '#{dest_path}'. " \
                     'A file already exists with that name'
         end
@@ -628,12 +628,12 @@ module Zip
           if ::File.readlink(dest_path) == linkto
             return
           else
-            raise ::Zip::DestinationFileExistsError,
+            raise Lindale::Zip::DestinationFileExistsError,
                   "Cannot create symlink '#{dest_path}'. " \
                       'A symlink already exists with that name'
           end
         else
-          raise ::Zip::DestinationFileExistsError,
+          raise Lindale::Zip::DestinationFileExistsError,
                 "Cannot create symlink '#{dest_path}'. " \
                     'A file already exists with that name'
         end
@@ -659,7 +659,7 @@ module Zip
 
     # create a zip64 extra information field if we need one
     def prep_zip64_extra(for_local_header) #:nodoc:all
-      return unless ::Zip.write_zip64_support
+      return unless Lindale::Zip.write_zip64_support
       need_zip64 = @size >= 0xFFFFFFFF || @compressed_size >= 0xFFFFFFFF
       need_zip64 ||= @local_header_offset >= 0xFFFFFFFF unless for_local_header
       if need_zip64

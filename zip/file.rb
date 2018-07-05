@@ -95,7 +95,7 @@ module Zip
       # to the block and is automatically closed afterwards just as with
       # ruby's builtin File.open method.
       def open(file_name, create = false)
-        zf = ::Zip::File.new(file_name, create)
+        zf = Lindale::Zip::File.new(file_name, create)
         return zf unless block_given?
         begin
           yield zf
@@ -107,7 +107,7 @@ module Zip
       # Same as #open. But outputs data to a buffer instead of a file
       def add_buffer
         io = ::StringIO.new('')
-        zf = ::Zip::File.new(io, true, true)
+        zf = Lindale::Zip::File.new(io, true, true)
         yield zf
         zf.write_buffer(io)
       end
@@ -127,7 +127,7 @@ module Zip
           # https://github.com/rubyzip/rubyzip/issues/119
           io.binmode
         end
-        zf = ::Zip::File.new(io, true, true, options)
+        zf = Lindale::Zip::File.new(io, true, true, options)
         zf.read_from_stream(io)
         return zf unless block_given?
         yield zf
@@ -267,9 +267,9 @@ module Zip
 
     # Convenience method for adding the contents of a file to the archive
     def add(entry, src_path, &continue_on_exists_proc)
-      continue_on_exists_proc ||= proc { ::Zip.continue_on_exists_proc }
+      continue_on_exists_proc ||= proc { Lindale::Zip.continue_on_exists_proc }
       check_entry_exists(entry, continue_on_exists_proc, 'add')
-      new_entry = entry.kind_of?(::Zip::Entry) ? entry : ::Zip::Entry.new(@name, entry.to_s)
+      new_entry = entry.kind_of?(Lindale::Zip::Entry) ? entry : Lindale::Zip::Entry.new(@name, entry.to_s)
       new_entry.gather_fileinfo_from_srcpath(src_path)
       new_entry.dirty = true
       @entry_set << new_entry
@@ -299,7 +299,7 @@ module Zip
 
     # Extracts entry to file dest_path.
     def extract(entry, dest_path, &block)
-      block ||= proc { ::Zip.on_exists_proc }
+      block ||= proc { Lindale::Zip.on_exists_proc }
       found_entry = get_entry(entry)
       found_entry.extract(dest_path, &block)
     end
@@ -309,7 +309,7 @@ module Zip
     def commit
       return if name.is_a?(StringIO) || !commit_required?
       on_success_replace do |tmp_file|
-        ::Zip::OutputStream.open(tmp_file) do |zos|
+        Lindale::Zip::OutputStream.open(tmp_file) do |zos|
           @entry_set.each do |e|
             e.write_to_zip_output_stream(zos)
             e.dirty = false
@@ -324,7 +324,7 @@ module Zip
 
     # Write buffer write changes to buffer and return
     def write_buffer(io = ::StringIO.new(''))
-      ::Zip::OutputStream.write_buffer(io) do |zos|
+      Lindale::Zip::OutputStream.write_buffer(io) do |zos|
         @entry_set.each { |e| e.write_to_zip_output_stream(zos) }
         zos.comment = comment
       end
@@ -371,7 +371,7 @@ module Zip
       raise Errno::EEXIST, "File exists - #{entryName}" if find_entry(entryName)
       entryName = entryName.dup.to_s
       entryName << '/' unless entryName.end_with?('/')
-      @entry_set << ::Zip::StreamableDirectory.new(@name, entryName, nil, permissionInt)
+      @entry_set << Lindale::Zip::StreamableDirectory.new(@name, entryName, nil, permissionInt)
     end
 
     private
@@ -394,7 +394,7 @@ module Zip
       if continue_on_exists_proc.call
         remove get_entry(entryName)
       else
-        raise ::Zip::EntryExistsError,
+        raise Lindale::Zip::EntryExistsError,
               procedureName + " failed. Entry #{entryName} already exists"
       end
     end

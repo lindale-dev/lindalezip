@@ -81,7 +81,7 @@ module Zip
     end
 
     def from_ntfs_time(ntfs_time)
-      ::Zip::DOSTime.at(ntfs_time / WINDOWS_TICK - SEC_TO_UNIX_EPOCH)
+      Lindale::Zip::DOSTime.at(ntfs_time / WINDOWS_TICK - SEC_TO_UNIX_EPOCH)
     end
 
     def to_ntfs_time(time)

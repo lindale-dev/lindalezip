@@ -69,14 +69,14 @@ module Zip
     protected
 
     def sorted_entries
-      ::Zip.sort_entries ? Hash[@entry_set.sort] : @entry_set
+      Lindale::Zip.sort_entries ? Hash[@entry_set.sort] : @entry_set
     end
 
     private
 
     def to_key(entry)
       k = entry.to_s.chomp('/')
-      k.downcase! if ::Zip.case_insensitive_match
+      k.downcase! if Lindale::Zip.case_insensitive_match
       k
     end
   end

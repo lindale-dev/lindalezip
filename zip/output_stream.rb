@@ -19,7 +19,7 @@ module Zip
   # class.
 
   class OutputStream
-    include ::Zip::IOExtras::AbstractOutputStream
+    include Lindale::Zip::IOExtras::AbstractOutputStream
 
     attr_accessor :comment
 
@@ -36,9 +36,9 @@ module Zip
                        else
                          ::File.new(@file_name, 'wb')
                        end
-      @entry_set = ::Zip::EntrySet.new
-      @compressor = ::Zip::NullCompressor.instance
-      @encrypter = encrypter || ::Zip::NullEncrypter.new
+      @entry_set = Lindale::Zip::EntrySet.new
+      @compressor = Lindale::Zip::NullCompressor.instance
+      @encrypter = encrypter || Lindale::Zip::NullEncrypter.new
       @closed = false
       @current_entry = nil
       @comment = nil
@@ -113,7 +113,7 @@ module Zip
       @compressor = NullCompressor.instance
       entry.get_raw_input_stream do |is|
         is.seek(src_pos, IO::SEEK_SET)
-        ::Zip::Entry.read_local_entry(is)
+        Lindale::Zip::Entry.read_local_entry(is)
         IOExtras.copy_stream_n(@output_stream, is, entry.compressed_size)
       end
       @compressor = NullCompressor.instance
@@ -131,7 +131,7 @@ module Zip
       @output_stream << @encrypter.data_descriptor(@current_entry.crc, @current_entry.compressed_size, @current_entry.size)
       @current_entry.gp_flags |= @encrypter.gp_flags
       @current_entry = nil
-      @compressor = ::Zip::NullCompressor.instance
+      @compressor = Lindale::Zip::NullCompressor.instance
     end
 
     def init_next_entry(entry, level = Zip.default_compression)
@@ -146,11 +146,11 @@ module Zip
     def get_compressor(entry, level)
       case entry.compression_method
       when Entry::DEFLATED then
-        ::Zip::Deflater.new(@output_stream, level, @encrypter)
+        Lindale::Zip::Deflater.new(@output_stream, level, @encrypter)
       when Entry::STORED then
-        ::Zip::PassThruCompressor.new(@output_stream)
+        Lindale::Zip::PassThruCompressor.new(@output_stream)
       else
-        raise ::Zip::CompressionMethodError,
+        raise Lindale::Zip::CompressionMethodError,
               "Invalid compression method: '#{entry.compression_method}'"
       end
     end

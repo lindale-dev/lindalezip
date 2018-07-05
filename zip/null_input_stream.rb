@@ -1,8 +1,8 @@
 module Lindale
 module Zip
   module NullInputStream #:nodoc:all
-    include ::Zip::NullDecompressor
-    include ::Zip::IOExtras::AbstractInputStream
+    include Lindale::Zip::NullDecompressor
+    include Lindale::Zip::IOExtras::AbstractInputStream
   end
 end
 end
