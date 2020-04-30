@@ -89,13 +89,13 @@ module Zip
   end
 end
 
-require_relative 'extra_field/generic'
-require_relative 'extra_field/universal_time'
-require_relative 'extra_field/old_unix'
-require_relative 'extra_field/unix'
-require_relative 'extra_field/zip64'
-require_relative 'extra_field/zip64_placeholder'
-require_relative 'extra_field/ntfs'
+Sketchup.require File.join(__dir__,'extra_field/generic')
+Sketchup.require File.join(__dir__,'extra_field/universal_time')
+Sketchup.require File.join(__dir__,'extra_field/old_unix')
+Sketchup.require File.join(__dir__,'extra_field/unix')
+Sketchup.require File.join(__dir__,'extra_field/zip64')
+Sketchup.require File.join(__dir__,'extra_field/zip64_placeholder')
+Sketchup.require File.join(__dir__,'extra_field/ntfs')
 
 end
 

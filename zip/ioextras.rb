@@ -29,8 +29,8 @@ module Zip
   end # IOExtras namespace module
 end
 
-require_relative 'ioextras/abstract_input_stream'
-require_relative 'ioextras/abstract_output_stream'
+Sketchup.require File.join(__dir__,'ioextras/abstract_input_stream')
+Sketchup.require File.join(__dir__,'ioextras/abstract_output_stream')
 
 end
 

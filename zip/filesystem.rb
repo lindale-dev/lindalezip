@@ -1,5 +1,5 @@
 module Lindale
-require 'zip'
+Sketchup.require 'zip'
 
 module Zip
   # The ZipFileSystem API provides an API for accessing entries in
