@@ -174,7 +174,7 @@ module Zip
       end
 
       def get_entry(fileName)
-        unless exists?(fileName)
+        unless exist?(fileName)
           raise Errno::ENOENT, "No such file or directory - #{fileName}"
         end
         @mappedZip.find_entry(fileName)
@@ -189,14 +189,13 @@ module Zip
       end
       private :unix_mode_cmp
 
-      def exists?(fileName)
+      def exist?(fileName)
         expand_path(fileName) == '/' || !@mappedZip.find_entry(fileName).nil?
       end
-      alias exist? exists?
 
       # Permissions not implemented, so if the file exists it is accessible
-      alias owned? exists?
-      alias grpowned? exists?
+      alias owned? exist?
+      alias grpowned? exist?
 
       def readable?(fileName)
         unix_mode_cmp(fileName, 0o444)
@@ -382,7 +381,7 @@ module Zip
       end
 
       def stat(fileName)
-        raise Errno::ENOENT, fileName unless exists?(fileName)
+        raise Errno::ENOENT, fileName unless exist?(fileName)
         ZipFsStat.new(self, fileName)
       end
 
